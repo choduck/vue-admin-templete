@@ -19,12 +19,12 @@ router.beforeEach(async(to, from, next) => {
 
   // determine whether the user has logged in
   const hasToken = getToken()
-  console.log("711111111111111111111777777777777")
+  console.log("hasToken==>" + hasToken)
 
   if (hasToken) {
     if (to.path === '/login') {
       
-      console.log("7777777777777")
+      console.log("login path")
       
       // if is logged in, redirect to the home page
       next({ path: '/' })
@@ -34,7 +34,7 @@ router.beforeEach(async(to, from, next) => {
     
     } else {
       
-      console.log("88888888888888888888888888")
+      console.log("not login path")
  
       next()
 /*
@@ -59,12 +59,12 @@ router.beforeEach(async(to, from, next) => {
     }
   
   
-  } else {
+  } else {  
      // has no token
 
     if (whiteList.indexOf(to.path) !== -1) {
       // in the free login whitelist, go directly
-      console.log("000000000000000000000000000000000")
+      console.log("토큰 없는 로그인 페이지")
       next()
     } else {
       // other pages that do not have permission to access are redirected to the login page.
