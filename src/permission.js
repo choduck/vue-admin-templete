@@ -10,7 +10,6 @@ NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
 const whiteList = ['/login'] // no redirect whitelist
 
-/*
 router.beforeEach(async(to, from, next) => {
   // start progress bar
   NProgress.start()
@@ -38,7 +37,7 @@ router.beforeEach(async(to, from, next) => {
       console.log("88888888888888888888888888")
  
       next()
-
+/*
       const hasGetUserInfo = store.getters.name
       if (hasGetUserInfo) {
         next()
@@ -56,7 +55,7 @@ router.beforeEach(async(to, from, next) => {
           NProgress.done()
         }
       }
-    
+    */
     }
   
   
@@ -76,7 +75,6 @@ router.beforeEach(async(to, from, next) => {
 
 
 })
-*/
 
 router.afterEach(() => {
   // finish progress bar

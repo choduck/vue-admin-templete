@@ -3,7 +3,7 @@ import axios from 'axios'
 
 var baseURL = 'http://localhost:9999'
 
-
+/*
 export function login(data) {
   return request({
     //url: '/vue-admin-template/user/login',
@@ -12,18 +12,18 @@ export function login(data) {
     data
   })
 }
+*/
 
 
-/*
-export function login(data) {
+export function login(params) {
   return axios({
     //url: '/prodList2',
-    url: baseURL + '/api/usercheck2',
+    url: baseURL + '/api/userCheck2',
     method: 'post',
     data: params  
   })
 }
-*/
+
 
 export function getInfo(token) {
   return request({
