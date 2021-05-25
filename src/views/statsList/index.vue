@@ -3,40 +3,42 @@
     <el-form class="toolbar" :inline="true">
      
       <el-form-item label="작업일자" prop="dpDt">
-          <el-date-picker  
-            v-model="startDt"
-            type="datetime"
-            placeholder="Start Time">
+        <el-date-picker  
+        
+            v-model="datepicker1"
+            type="date"
+            placeholder="Start Time" value-format="yyyy-MM-dd" >
           </el-date-picker>
           <span class="demonstration"> ~ </span>
           <el-date-picker 
-            v-model="endDt"
-            type="datetime"
-            placeholder="End Time">
+            v-model="datepicker2"
+            type="date"
+            placeholder="End Time" value-format="yyyy-MM-dd" >
           </el-date-picker>
-          
+           <el-button type="primary" v-on:click="fetchData">검색</el-button>
       </el-form-item><br>
 
     
     </el-form>
 
     <div class="app-container">
-          <el-table :data="tableData">
-              <el-table-column prop="prod_no" label="ID" width="180" align="center"> </el-table-column>
-              <el-table-column prop="work_stat_nm" label="담당접수자" align="center"> </el-table-column>
-              <el-table-column prop="prod_kor_nm" label="할당" width="180" align="center"> </el-table-column>
-              <el-table-column prop="t1_old_catg_nm" label="검수완료" width="180" align="center"> </el-table-column>
-              <el-table-column prop="t2_old_catg_nm" label="진행률" width="180" align="center"> </el-table-column>
-              <el-table-column prop="t3_old_catg_nm" label="작업중" width="180" align="center"> </el-table-column>
-              <el-table-column prop="t4_old_catg_nm" label="검수요청" width="180" align="center"> </el-table-column>
-              <el-table-column prop="work_user_nm" label="검수반려" width="180" align="center"> </el-table-column>
+          <el-table ref="fruits" :data="tableData" show-summary :summary-method="getSummaries" >
+              <el-table-column prop="work_user_id" label="ID" width="180" align="center"> </el-table-column>
+              <el-table-column prop="chrg_insp_user_id" label="담당접수자" align="center"> </el-table-column>
+              <el-table-column prop="tot" label="할당" width="180" align="center"> </el-table-column>
+              <el-table-column prop="complete" label="검수완료" width="180" align="center"> </el-table-column>
+              <el-table-column prop="progress" label="진행률" width="180" align="center"> </el-table-column>
+              <el-table-column prop="working" label="작업중" width="180" align="center"> </el-table-column>
+              <el-table-column prop="request" label="검수요청" width="180" align="center"> </el-table-column>
+              <el-table-column prop="reject" label="검수반려" width="180" align="center"> </el-table-column>
           </el-table>
   </div>
   </section>
 </template>
 
 <script>
-import axios from 'axios'
+import { getList } from '@/api/statistics'
+
 export default {
   filters: {
     statusFilter(status) {
@@ -51,149 +53,78 @@ export default {
   data() {
     return {
       tableData: [],
-      oldCtgyList:[],
-      oldCtgyList2:[],
-      oldCtgyList3:[],
-      oldCtgyList4:[],
-      oldCatg:'전체',
-      oldCatg2:'전체',
-      oldCatg3:'전체',
-      oldCatg4:'전체',
       list: null,
       listLoading: true,
-      workStat: '100',
       questionCheck: ['question one', 'question two'],
       questions: ['question one', 'question two','question tree'],
-      workStatOptions: ['100','200','300','400','500'],
-      checkedExams: '100',
-      checkedExams1:[],
-      startDt:'',
-      endDt:'',
+      datepicker1:'',
+      datepicker2:'',
       isIndeterminate:'',
-      checkAll: false
+      checkAll: false ,
+      SrchTypeId:'',
+      SrchType: [{
+              value: 'all   ',
+              label: 'ALL'
+          }, {
+              value: 'prdId',
+              label: '상품ID'
+          }, {
+              value: 'prdNm',
+              label: '상품명'
+          }
+      ],
+      srchWord:''
     }
   },
+
   created() {
-    console.log('ProdList =====>')
     this.fetchData()
   },
   methods: {
-    handleCheckAllChange(val) {
-      this.checkedExams = val ? this.workStatOptions : [];
-      this.isIndeterminate = false;
-      
-      for (var i = 0; i < this.checkedExams.length; i++) {
-        var obj = {
-          id: this.checkedExams[i]
-        };
-        this.checkedExams1.push(obj);
-      }
-       
-      //this.checkedExams = checkedExams  
-      console.log('checkedExams ==>' + this.checkedExams)
-      console.log('checkedExams1 ==>' + this.checkedExams1)
-
-    
-    },
-    
-    getWorkStatList(){    
-      
-      //var checkedExams = [];
-      for (var i = 0; i < this.checkedExams.length; i++) {
-        var obj = {
-          id: this.checkedExams[i]
-        };
-        this.checkedExams1.push(obj);
-      }
-       
-      //this.checkedExams = checkedExams  
-      console.log('checkedExams ==>' + this.checkedExams)
-      console.log('checkedExams1 ==>' + this.checkedExams1)
-
-    },
-    
-    onOldCatgChange(){
-      console.log(this.oldCatg)
-    },
+    getSummaries(param) {
+        const { columns, data } = param;
+        const sums = [];
+        columns.forEach((column, index) => {
+          if (index === 0) {
+            sums[index] = '';
+            return;
+          }
+          if (index !== 1) {
+            const values = data.map(item =>  Number(item[column.property]));
+            if (!values.every(value => isNaN(value))) {
+              sums[index] = values.reduce((prev, curr) => {
+                const value = Number(curr);
+                if (!isNaN(value)) {
+                  return prev + curr;
+                } else {
+                  return prev;
+                }
+              }, 0);
+            } 
+          }else{
+            sums[index] = '합계'; 
+          }
+        });
+        return sums;
+      },
     fetchData() {
       this.listLoading = true
-      //this.workStat[0] = {workStat:'100'}
       
       getList({
-        upCatgCd: this.oldCatg,
-        catgLv: 2,
-        workStat: '100'       
-        //workStat: this.workStatOptions       
-        //checkedExams1: ['100']
+        datepicker1: this.datepicker1,
+        datepicker2: this.datepicker2       
       }).then(response => {
         
         console.log('response.data ==>' + response.data)
         
-        this.tableData = response.data
-        this.oldCtgyList = response.oldCtgyList         
-        
-
-        //this.list = response.data.items
+        this.tableData = response.data    
+        var tableSize = this.tableData.length + 1;
         this.listLoading = false
+        
+        console.log('response.data ==>' + this.tableData[tableSize])
+        this.tableData[tableSize]
       })
     },
-    fetchOldCatgData() {
-      this.listLoading = true
-      getOldCatList({
-        upCatgCd: this.oldCatg,
-        catgLv: 2
-
-      }).then(response => {
-        
-        console.log('response.oldCtgyList ==>' + response.oldCtgyList)
-        
-        //this.tableData = response.data
-        this.oldCtgyList2 = response.oldCtgyList         
-        this.oldCatg2 =''
-        this.oldCatg3 =''
-        this.oldCatg4 =''
-        //this.list = response.data.items
-        this.listLoading = false
-      })
-  },
-  fetchOldCatgData2() {
-      this.listLoading = true
-      getOldCatList({
-        upCatgCd: this.oldCatg2,
-        catgLv: 3
-
-      }).then(response => {
-        
-        console.log('response.oldCtgyList ==>' + response.oldCtgyList)
-        
-        //this.tableData = response.data
-        this.oldCtgyList3 = response.oldCtgyList         
-        this.oldCatg3 =''
-        this.oldCatg4 =''
-        //this.list = response.data.items
-        this.listLoading = false
-      })
-  },
-  fetchOldCatgData3() {
-      this.listLoading = true
-      getOldCatList({
-        upCatgCd: this.oldCatg3,
-        catgLv: 4
-
-      }).then(response => {
-        
-        console.log('response.oldCtgyList ==>' + response.oldCtgyList)
-        
-        //this.tableData = response.data
-        this.oldCtgyList4 = response.oldCtgyList         
-        //this.oldCatg2 =''
-        //this.list = response.data.items
-        this.listLoading = false
-      })
   }
-
-
-}
-
 }
 </script>
