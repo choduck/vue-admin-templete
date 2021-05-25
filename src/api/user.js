@@ -1,13 +1,29 @@
 import request from '@/utils/request'
+import axios from 'axios'
+
+var baseURL = 'http://localhost:9999'
+
 
 export function login(data) {
   return request({
     //url: '/vue-admin-template/user/login',
-    url: '/userCheck2',
+    url: '/api/userCheck2',
     method: 'post',
     data
   })
 }
+
+
+/*
+export function login(data) {
+  return axios({
+    //url: '/prodList2',
+    url: baseURL + '/api/usercheck2',
+    method: 'post',
+    data: params  
+  })
+}
+*/
 
 export function getInfo(token) {
   return request({

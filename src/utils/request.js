@@ -13,10 +13,10 @@ const service = axios.create({
   //url: "http://localhost:9999",
   baseURL: "http://localhost:9999",
 //  headers: 'application/json;charset=utf-8',
-  headers: { 'content-type': 'application/x-www-form-urlencoded' },
+ // headers: { 'content-type': 'application/x-www-form-urlencoded' },
   
   
-  withCredentials: true, // send cookies when cross-domain requests
+//  withCredentials: true, // send cookies when cross-domain requests
   timeout: 5000 // request timeout
 })
 
@@ -24,7 +24,7 @@ const service = axios.create({
 //service.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
 
 // request interceptor
-/*
+
 service.interceptors.request.use(
   config => {
     // do something before request is sent
@@ -43,7 +43,7 @@ service.interceptors.request.use(
     return Promise.reject(error)
   }
 )
-*/
+
 // response interceptor
 service.interceptors.response.use(
   /**
