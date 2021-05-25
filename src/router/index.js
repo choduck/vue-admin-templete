@@ -66,7 +66,6 @@ export const constantRoutes = [
         path: 'table',
         name: 'Table',
         component: () => import('@/views/prodList/index'),
-        //component: () => import('@/views/table/index'),
         meta: { title: 'Table', icon: 'table' }
       },
       {
@@ -76,17 +75,23 @@ export const constantRoutes = [
         meta: { title: 'Stats', icon: 'table' }
       },
       {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
+        path: 'trans',
+        name: 'Trans',
+        component: () => import('@/views/transList/transList'),
+        meta: { title: 'Trans', icon: 'table' }
       },
       {
         path: 'detail',
         name: 'prodDetail',
         component: () => import('@/views/prodList/prodDetail'),
+        meta: { title: 'Detail', icon: 'table' }
+      },
+      {
+        path: 'tree',
+        name: 'Tree',
+        component: () => import('@/views/tree/index'),
         meta: { title: 'Tree', icon: 'tree' }
-      }
+      },
 
     ]
   },
