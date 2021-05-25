@@ -3,27 +3,27 @@ import axios from 'axios'
 
 var baseURL = 'http://localhost:9999'
 
-/*
+
 export function login(data) {
   return request({
     //url: '/vue-admin-template/user/login',
-    url: '/api/userCheck2',
+    url: '/api/userCheck',
     method: 'post',
     data
   })
 }
-*/
 
 
+/*
 export function login(params) {
   return axios({
     //url: '/prodList2',
-    url: baseURL + '/api/userCheck2',
+    url: baseURL + '/api/userCheck',
     method: 'post',
     data: params  
   })
 }
-
+*/
 
 export function getInfo(token) {
   return request({
@@ -35,7 +35,17 @@ export function getInfo(token) {
 
 export function logout() {
   return request({
-    url: '/vue-admin-template/user/logout',
+    url: '/api/logout',
     method: 'post'
   })
+
+/*  
+  export function logout() {
+    return request({
+      url: '/vue-admin-template/user/logout',
+      method: 'post'
+    })
+*/  
+
+
 }

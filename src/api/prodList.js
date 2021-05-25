@@ -7,7 +7,7 @@ export function getList(params) {
 
   return axios({
     //url: '/prodList2',
-    url: baseURL + '/api/prodList3',
+    url: baseURL + '/api/prodList',
     method: 'post',
     data: params  
   })

@@ -46,18 +46,18 @@
           <el-checkbox label="400" :disabled="false">{{'검수완료'}}</el-checkbox>
           <el-checkbox label="500" :disabled="false">{{'검수반려'}}</el-checkbox>
         </el-checkbox-group>
-        <el-button type="primary" @click="getWorkStatList">작업상태가져오기</el-button>
+       <!-- <el-button type="primary" @click="getWorkStatList">작업상태가져오기</el-button>  -->
       </el-form-item><br>
       <el-form-item label="작업일자" prop="dpDt">
           <el-date-picker  
             v-model="datepicker1"
-            type="datetime"
+            type="date"
             placeholder="Start Time" value-format="yyyy-MM-dd" @change="handleDateChange">
           </el-date-picker>
           <span class="demonstration"> ~ </span>
           <el-date-picker 
             v-model="datepicker2"
-            type="datetime"
+            type="date"
             placeholder="End Time" value-format="yyyy-MM-dd" @change="handleDateChange" >
           </el-date-picker>
           
@@ -81,13 +81,14 @@
           </el-col>
           <el-col :span="4">
             <el-button type="primary" v-on:click="fetchData">검색</el-button>
-            <el-button type="primary" v-on:click="testAxios">검색1</el-button>
+           <!-- <el-button type="primary" v-on:click="testAxios">검색1</el-button>
             <el-button type="primary" v-on:click="testAxios2">검색2</el-button>
+          -->
           </el-col>
         </el-row>
       </el-form-item>
 
-
+<!--
       <el-checkbox-group 
             v-model="questionCheck"
               :min="1"
@@ -96,7 +97,7 @@
                 {{question}}
           </el-checkbox>
       </el-checkbox-group>   
-
+-->
     
     </el-form>
 
