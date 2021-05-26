@@ -31,8 +31,9 @@
       <el-form-item label="Activity name">
          <el-col :span="2">
            <el-select v-model="form.region" placeholder="please select your zone">
-          <el-option label="Zone one" value="shanghai" />
-          <el-option label="Zone two" value="beijing" />
+          <el-option label="All" value="all" />
+          <el-option label="작업자Id" value="workUser" />
+          <el-option label="보정자Id" value="inspUser" />
         </el-select>
          </el-col>
          <el-col :span="1">-</el-col>
@@ -41,12 +42,12 @@
          </el-col>
            <el-col :span="5">-</el-col>
            <el-col :span="2">
-              <el-button type="primary" @click="fetchData">Create</el-button>
+              <el-button type="primary" @click="fetchData">검색</el-button>
            </el-col>
       </el-form-item>
     </el-form>
     <div class="app-container">
-          <el-table ref="fruits" :data="tableData" >
+          <el-table :data="tableData" >
               <el-table-column prop="prod_no" label="ID" width="100" align="center"> </el-table-column>
               <el-table-column prop="prod_kor_nm" label="상품명" align="center"> </el-table-column>
               <el-table-column prop="old_catg_nm" label="카테고리" width="180" align="center"> </el-table-column>
