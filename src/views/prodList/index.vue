@@ -125,6 +125,12 @@
               <el-table-column prop="t4_old_catg_nm" label="Lv4" width="180" align="center"> </el-table-column>
               <el-table-column prop="work_user_nm" label="작업자ID" width="180" align="center"> </el-table-column>
           </el-table>
+          <el-pagination
+            @current-change="handleCurrentChange"
+            :page-size="10"
+            :pager-count="11"
+            layout="prev, pager, next"
+            :total="1000"></el-pagination>
   </div>
   </section>
 </template>
@@ -133,6 +139,7 @@
 import { getList,getOldCatList } from '@/api/prodList'
 import axios from 'axios'
 
+var pg = 1;
 export default {
   filters: {
     statusFilter(status) {
@@ -313,7 +320,10 @@ export default {
   
 
     },
-    
+     handleCurrentChange(val) {
+      pg = val;
+      this.fetchData();
+    },
     fetchData() {
       this.listLoading = true
       
@@ -328,7 +338,8 @@ export default {
         srchType : this.SrchTypeId,
 	      srchWord : this.srchWord,
         datepicker1: this.datepicker1,
-        datepicker2: this.datepicker2       
+        datepicker2: this.datepicker2,
+        page : pg
         //checkedExams1: ['100']
       }).then(response => {
         
