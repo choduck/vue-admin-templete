@@ -1,46 +1,12 @@
-//import request from '@/utils/request'
 import axios from 'axios'
 
 var baseURL = 'http://localhost:9999'
 
 export function getList(params) {
-
-  return axios({
-    //url: '/prodList2',
-    url: baseURL + '/api/selectTransfer',
-    method: 'post',
-    data: params  
-  })
-
-
-  
-/*  
-  return request({
-    //url: '/prodList2',
-    url: '/api/prodList3',
-    method: 'post',
-    params  
-  })
-*/
-
+    console.log(params);
+    return axios({
+        url: baseURL + '/api/selectTransfer',
+        method: 'post',
+        data: params
+    })
 }
-
-export function getOldCatList(params) {
-
-  return axios({
-    //url: '/prodList2',
-    url: baseURL + '/api/getOldCatList',
-    method: 'post',
-    data: params  
-  })
-
-  /*
-  return request({
-    url: '/api/getOldCatList',
-    method: 'post',
-    params
-  })
-*/
-
-}
-

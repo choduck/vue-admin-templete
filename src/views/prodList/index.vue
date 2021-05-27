@@ -107,7 +107,7 @@
               <el-table-column prop="work_stat_nm" label="작업상태" align="center"> </el-table-column>
               <el-table-column prop="prod_kor_nm" label="상품한글명" width="180" align="center"> 
                   <template slot-scope="scope">
-                    <span @click="detail(scope.row.prod_no,scope.row.prod_kor_nm)">{{scope.row.prod_kor_nm}}</span>
+                    <span style="cursor: pointer" @click="detail(scope.row.prod_no,scope.row.prod_kor_nm)">{{scope.row.prod_kor_nm}}</span>
                   </template>
               </el-table-column>   
               <el-table-column prop="t1_old_catg_nm" label="Lvl" width="180" align="center"> </el-table-column>
