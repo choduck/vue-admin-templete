@@ -4,13 +4,12 @@
       
       <el-row>
         <el-col :span="7">
-          <el-form-item label="상품 번호">
-            <el-input v-model="prodNo" />
+          <el-form-item label="상품 번호:">{{prodNo}}
+            
           </el-form-item>
         </el-col>
         <el-col :span="7">
-          <el-form-item label="상태">
-            <el-input v-model="form.name" />
+          <el-form-item label="상태:">{{work_stat_nm}}
           </el-form-item>
         </el-col>
         <el-col :span="10">
@@ -18,11 +17,25 @@
       </el-row>
       <el-row>
         <el-col :span="15">
-          <el-form-item label="상품명">
-            <el-input v-model="prodNm" />
+          <el-form-item label="상품명:">{{prodNm}}
           </el-form-item>
         </el-col>
         <el-col :span="9">
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="15">
+          <el-form-item label="카테고리:">{{old_catg_nm}}
+          </el-form-item>
+        </el-col>
+        <el-col :span="9">
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="7">
+            <el-button type="primary" @click="walletAddressGetAddPop()">신카테고리</el-button> 
+        </el-col>
+        <el-col :span="17">
         </el-col>
       </el-row>
       
@@ -64,17 +77,107 @@
       <el-form-item>
         <el-button type="primary" @click="onSubmit">Create</el-button>
         <el-button @click="onCancel">Cancel</el-button>
+        <el-button type="primary" v-on:click="testAxios">tree검색</el-button>
       </el-form-item>
     </el-form>
+
+    <el-dialog :visible.sync="walletAddressAddPop" :title="'신카테고리'" class="wallet-address-pop" width="40%">
+      <!--
+      <el-tree
+        ref="tree2"
+        :data="treeData"
+        :props="defaultProps"
+        class="filter-tree"
+        default-expand-all
+      />
+      -->
+      <el-tree :data="treeData" show-checkbox node-key="menuId" ref="tree" highlight-current :props="defaultProps">
+      </el-tree>
+
+      <el-row>
+        <el-col :span="7">
+          <el-input placeholder="이름"></el-input>
+        </el-col>
+        <el-col :offset="1" :span="16">
+          <el-input placeholder="주소 입력"></el-input>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="6">
+          <el-checkbox v-model="destinationAddressChk" class="destination-address-chk"> 추가 주소 사용 </el-checkbox>
+        </el-col>
+        <el-col :span="18">
+          <el-input v-if="destinationAddressChk" placeholder="데스티네이션 태그 또는 추가 주소 입력"></el-input>
+        </el-col>
+      </el-row>
+      <div style="text-align:center; margin-top:15px;">
+        <el-button @click="walletAddressAddPop = false;">등록</el-button>
+      </div>
+    </el-dialog>
+
+
+  
+  
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   data() {
     return {
+      
       prodNo: this.$route.query.prodNo,
       prodNm: this.$route.query.prodNm,
+      work_stat_nm: this.$route.query.work_stat_nm,
+      old_catg_nm: this.$route.query.t1_old_catg_nm + '>' + this.$route.query.t2_old_catg_nm +  (this.$route.query.t3_old_catg_nm = 'undefined'? '': '>' + this.$route.query.t3_old_catg_nm) + (this.$route.query.t4_old_catg_nm = 'undefined'? '': '>' + this.$route.query.t4_old_catg_nm),
+      
+			walletAddressAddPop: false,							// 주소록 추가 팝업
+			destinationAddressChk: false,						// 추가주소록 체크박스
+      treeData:[],
+      data2: [{
+        id: 1,
+        label: 'Level one 1',
+        children: [{
+          id: 4,
+          label: 'Level two 1-1',
+          children: [{
+            id: 9,
+            label: 'Level three 1-1-1'
+          }, {
+            id: 10,
+            label: 'Level three 1-1-2'
+          }]
+        }]
+      }, {
+        id: 2,
+        label: 'Level one 2',
+        children: [{
+          id: 5,
+          label: 'Level two 2-1'
+        }, {
+          id: 6,
+          label: 'Level two 2-2'
+        }]
+      }, {
+        id: 3,
+        label: 'Level one 3',
+        children: [{
+          id: 7,
+          label: 'Level two 3-1'
+        }, {
+          id: 8,
+          label: 'Level two 3-2'
+        }]
+      }],
+      defaultProps: {
+        children: 'children',
+        label: 'label'
+      },
+
+
+
       form: {
         name: '',
         region: '',
@@ -87,7 +190,67 @@ export default {
       }
     }
   },
+  watch: {
+    walletAddressAddPop(value) {
+
+        console.log('value ===>' + value)
+        
+        if (value == true) { // 1주일
+            
+            this.testAxios()
+        } 
+    }
+  },
+  created() {
+    console.log('ProdList =====>')
+    //this.testAxios()
+    //this.testAxios()
+  },
+
+  
   methods: {
+    isEmpty(value) { 
+      if( value == "" || value == null || value == undefined){  
+        return '' 
+      }else{ 
+        return value
+      }
+    },
+		walletAddressGetAddPop() {
+			
+			this.walletAddressAddPop = true;
+		},
+    testAxios(){
+      
+      this.workStat = ['100','200','300']  
+      var _this = this;
+
+
+      var jsonData ={
+        upCatgCd: '',
+        catgLv: ''
+        //workStat: '100'       
+        //workStat: ''       
+        //checkedExams1: ['100']
+      }
+      
+      console.log('==========>' + JSON.stringify(jsonData))
+
+      console.log('this.data2 ===>',this.data2)
+
+      axios.post('http://localhost:9999/api/treeList', jsonData
+      //axios.post('http://localhost:9999/api/prodList3', JSON.stringify(jsonData)
+     //   ,{ headers: { 'Content-Type': 'application/json' } }
+      )
+      .then(function(response) {
+          if (response.status == 200) {
+              console.log(response.data.newCatList)
+              _this.treeData = response.data.newCatList
+          
+          }
+      })
+    },
+
     onSubmit() {
       this.$message('submit!')
     },

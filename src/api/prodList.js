@@ -44,3 +44,11 @@ export function getOldCatList(params) {
 
 }
 
+export function getTreeList() {
+
+  return axios({
+    //url: '/prodList2',
+    url: baseURL + '/api/treeList2',
+    method: 'post'
+  })
+}

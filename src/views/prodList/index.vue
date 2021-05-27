@@ -107,7 +107,16 @@
               <el-table-column prop="work_stat_nm" label="작업상태" align="center"> </el-table-column>
               <el-table-column prop="prod_kor_nm" label="상품한글명" width="180" align="center"> 
                   <template slot-scope="scope">
-                    <span style="cursor: pointer" @click="detail(scope.row.prod_no,scope.row.prod_kor_nm)">{{scope.row.prod_kor_nm}}</span>
+
+                    <span @click="detail(scope.row.prod_no,
+                                         scope.row.prod_kor_nm,
+                                         scope.row.work_stat_nm,
+                                         scope.row.t1_old_catg_nm,
+                                         scope.row.t2_old_catg_nm,
+                                         scope.row.t3_old_catg_nm,
+                                         scope.row.t4_old_catg_nm  
+                                        )">{{scope.row.prod_kor_nm}}</span>
+
                   </template>
               </el-table-column>   
               <el-table-column prop="t1_old_catg_nm" label="Lvl" width="180" align="center"> </el-table-column>
@@ -183,11 +192,18 @@ export default {
     //this.testAxios()
   },
   methods: {
-    detail(prodNo,prodNm) {
+    detail(prodNo,prodNm,work_stat_nm,t1_old_catg_nm,t2_old_catg_nm,t3_old_catg_nm,t4_old_catg_nm) {
       console.log('no = ', prodNo);
       this.$router.push({
         path: '/example/detail',
-        query: {prodNo:prodNo,prodNm:prodNm}
+        query: {prodNo:prodNo,
+                prodNm:prodNm,
+                work_stat_nm:work_stat_nm,
+                t1_old_catg_nm:t1_old_catg_nm,
+                t2_old_catg_nm:t2_old_catg_nm,
+                t3_old_catg_nm:t3_old_catg_nm,
+                t4_old_catg_nm:t4_old_catg_nm
+               }
       })
     },
     handleDateChange(){
