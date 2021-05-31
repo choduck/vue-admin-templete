@@ -188,7 +188,10 @@ export default {
   },
   created() {
     console.log('ProdList =====>')
-    this.fetchData()
+    
+    //this.fetchData()
+    //this.fetchPromiseTest()
+    this.fetchTestData()
     //this.testAxios()
   },
   methods: {
@@ -314,6 +317,74 @@ export default {
 
     },
     
+    login({ commit }, userInfo) {
+      const { username, password } = userInfo
+      return new Promise((resolve, reject) => {
+        login({ userId: username.trim(), userPass: password }).then(response => {
+          
+          
+          console.log("user login")
+          console.log(response)
+
+          //const { data } = response.data
+          console.log("data.token =======>" + response.token)
+          console.log("data.user =======>" + JSON.stringify(response.user))
+
+          commit('SET_TOKEN', response.token)
+          setToken(response.token)
+
+          //commit('SET_TOKEN', data.token)
+          //setToken(data.token)
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+    
+    fetchPromiseTest(){
+      
+      console.log('fetchPromiseTest==========>')
+
+      return new Promise((resolve, reject) => {
+        getList({
+          upCatgCd: this.oldCatg,
+          catgLv: 2,
+          oldCatgCd1: this.oldCatg,
+          oldCatgCd2: this.oldCatg2,
+          oldCatgCd3: this.oldCatg3,
+          oldCatgCd4: this.oldCatg4,
+          workStat: this.workStat,
+          srchType : this.SrchTypeId,
+          srchWord : this.srchWord,
+          datepicker1: this.datepicker1,
+          datepicker2: this.datepicker2       
+          //checkedExams1: ['100']
+        }).then(response => {
+          
+          console.log('response.data ==>' + response.data.data)
+          
+          this.tableData = response.data.data
+          this.oldCtgyList = response.data.oldCtgyList         
+          
+
+          //this.list = response.data.items
+          this.listLoading = false
+          
+          resolve(this.tableData)
+        }).catch(error => {
+          reject(error)
+        })
+ 
+      
+      })  
+    },
+    
+    async fetchTestData() {
+      var list = await this.fetchPromiseTest()
+      console.log('async test ====>' + list)
+    },
+
     fetchData() {
       this.listLoading = true
       
@@ -342,6 +413,7 @@ export default {
         this.listLoading = false
       })
     },
+    
     fetchOldCatgData() {  
       this.listLoading = true
       getOldCatList({

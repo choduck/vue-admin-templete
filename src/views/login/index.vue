@@ -112,6 +112,7 @@ export default {
           this.loading = true
           this.$store.dispatch('user/login', this.loginForm).then(() => {
             
+            this.$store.dispatch('product/fecthTreeList', '')
             console.log("handleLogin..........")
             
             //this.$router.push({ path: '/prodList' })
