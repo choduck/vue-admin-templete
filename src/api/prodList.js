@@ -12,43 +12,45 @@ export function getList(params) {
     data: params  
   })
 
-
-  
-/*  
-  return request({
-    //url: '/prodList2',
-    url: '/api/prodList3',
-    method: 'post',
-    params  
-  })
-*/
-
 }
 
 export function getOldCatList(params) {
 
   return axios({
-    //url: '/prodList2',
+    
     url: baseURL + '/api/getOldCatList',
     method: 'post',
     data: params  
   })
-
-  /*
-  return request({
-    url: '/api/getOldCatList',
-    method: 'post',
-    params
-  })
-*/
 
 }
 
 export function getTreeList() {
 
   return axios({
-    //url: '/prodList2',
+    
     url: baseURL + '/api/treeList2',
     method: 'post'
   })
 }
+
+export function selectNewCatPath(params) {
+
+  return axios({
+    
+    url: baseURL + '/api/selectNewCatPath',
+    method: 'post',
+    data: params
+  })
+}
+
+export function selectKdmLovVal(params) {
+
+  return axios({
+    
+    url: baseURL + '/api/selectKdmLovVal',
+    method: 'post',
+    data: params
+  })
+}
+

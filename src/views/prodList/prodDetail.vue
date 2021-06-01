@@ -39,42 +39,82 @@
           <dnd-list :list1="newCatg"  list1-title="List"  @change1="displayList2" />
         </el-col>
       </el-row>
-      
-      <el-form-item label="Activity zone">
-        <el-select v-model="form.region" placeholder="please select your zone">
-          <el-option label="Zone one" value="shanghai" />
-          <el-option label="Zone two" value="beijing" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="Activity time">
-        <el-col :span="11">
-          <el-date-picker v-model="form.date1" type="date" placeholder="Pick a date" style="width: 100%;" />
+      <el-row>
+        <el-col :span="8">
+          <el-form-item label="주요소재:"><el-input v-model="form.desc" type="input" />
+          </el-form-item>
         </el-col>
-        <el-col :span="2" class="line">-</el-col>
-        <el-col :span="11">
-          <el-time-picker v-model="form.date2" type="fixed-time" placeholder="Pick a time" style="width: 100%;" />
+        <el-col :span="16">
+          <el-form-item label="주요공정:">        
+            <el-select v-bind:style="{marginRight:'20px'}" v-model="gpProc1Info" @change="fetchKdmValListData('GP_PROC2')" placeholder="select">
+              <el-option
+                v-for="item in gpProc1"
+                :key="item.lov_val"
+                :label="item.lov_val_kor_nm"
+                :value="item.lov_val">
+              </el-option>
+            </el-select>
+            <el-select v-bind:style="{marginRight:'20px'}" v-model="gpProc2Info" placeholder="select">
+              <el-option
+                v-for="item in gpProc2"
+                :key="item.lov_val"
+                :label="item.lov_val_kor_nm"
+                :value="item.lov_val">
+              </el-option>
+            </el-select>
+
+          </el-form-item>
         </el-col>
-      </el-form-item>
-      <el-form-item label="Instant delivery">
-        <el-switch v-model="form.delivery" />
-      </el-form-item>
-      <el-form-item label="Activity type">
-        <el-checkbox-group v-model="form.type">
-          <el-checkbox label="Online activities" name="type" />
-          <el-checkbox label="Promotion activities" name="type" />
-          <el-checkbox label="Offline activities" name="type" />
-          <el-checkbox label="Simple brand exposure" name="type" />
-        </el-checkbox-group>
-      </el-form-item>
-      <el-form-item label="Resources">
-        <el-radio-group v-model="form.resource">
-          <el-radio label="Sponsor" />
-          <el-radio label="Venue" />
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="Activity form">
-        <el-input v-model="form.desc" type="textarea" />
-      </el-form-item>
+      </el-row>
+      <el-row>
+        <el-col :span="15">
+          <el-form-item label="키워드추가:">
+          </el-form-item>
+        </el-col>
+        <el-col :span="9">
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="22">
+          <el-form-item label="특이사항:">
+          <el-input v-model="form.desc" type="textarea" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="2">
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="22">
+          <el-form-item label="반려사유:">
+          <el-input v-model="form.desc" type="input" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="2">
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="22">
+          <el-form-item label="외부검색:">
+            <el-button type="primary" v-on:click="displaytreeData">GoBiz</el-button>
+            <el-button type="primary" v-on:click="displayList2">Allibaba</el-button>
+         </el-form-item>
+        </el-col>
+        <el-col :span="2">
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="10">
+        </el-col>
+        <el-col :span="14">
+          <el-form-item>
+            <el-button type="primary" @click="onSubmit">저장하기</el-button>
+            <el-button type="primary" v-on:click="testAxios">검수요청</el-button>
+            <el-button type="primary" v-on:click="displaytreeData">검수요청취소</el-button>
+            <el-button type="primary" v-on:click="displayList2">이관</el-button>
+          </el-form-item>
+        </el-col>
+      </el-row>            
+<!--
       <el-form-item>
         <el-button type="primary" @click="onSubmit">Create</el-button>
         <el-button @click="onCancel">Cancel</el-button>
@@ -83,6 +123,7 @@
         <el-button type="primary" v-on:click="displayList2">list2 검색</el-button>
       
       </el-form-item>
+-->
     </el-form>
 
     <el-dialog :visible.sync="walletAddressAddPop" :title="'신카테고리'" class="wallet-address-pop" width="40%">
@@ -171,7 +212,8 @@
 
 <script>
 import axios from 'axios'
-import { getTreeList } from '@/api/prodList'
+import { getTreeList,selectNewCatPath,selectKdmLovVal } from '@/api/prodList'
+import {getListData,data2treeDG, getTreeData } from '@/utils/category'
 import {mapState} from 'vuex'
 import DndList from '@/components/DndList'
 
@@ -192,6 +234,12 @@ export default {
       newCatg:[],
       list1:[],
       list2:[],
+      gpProc1:[
+      ],
+      gpProc2:[
+      ],
+      gpProc1Info:'',
+      gpProc2Info:'',
       data2: [{
         id: 1,
         label: 'Level one 1',
@@ -248,9 +296,12 @@ export default {
   },
  
  computed: {
+    
     ...mapState({
       treeList: state => state.product.treeList
     }),
+  
+  
   },
 
   watch: {
@@ -264,40 +315,123 @@ export default {
         if (value == true) { // 1주일
             
             var _this = this
-            _this.setTree = this.treeList
-            //_this.getListData()
-/*            
-            getTreeList().then(data => {
-                
-                _this.setTree = data.data.treeModel
-                console.log('_this.setTree start==>')
-                console.log('_this.setTree ==>' + JSON.stringify(_this.setTree))
-                _this.getListData()
-                  // this.$router.push({ path: '/table' });
-            });
-*/
-        
+            if(this.treeList != '')
+              _this.setTree = this.treeList
+            //_this.setTree = getTreeData()
         } 
     }
   },
+  
   created() {
-    console.log('ProdList =====>')
+    
+    console.log('create this.treeList ==>' + this.treeList)
+    if(this.treeList == ''){    
+        
+        getTreeList().then(response => {
+        
+        console.log("this.treeList == null")
+        //console.log("response.data.treeModel =======>" + response.data.treeModel)
+        let dataArray = []
+        //commit('SET_TREELIST', response.data.treeModel)
+        dataArray = getListData(response.data.treeModel)
+        let treeInfo = ''
+        this.setTree = data2treeDG(response.data.treeModel, dataArray)
+        
+      })
+        
+                
+    }
+    
+    //this.setTree = getTreeData()
+    console.log('this.setTree =====>' + JSON.stringify(this.setTree))
+    this.fetchKdmValListData('GP_PROC1')
     //this.testAxios()
-    //this.testAxios()
+  
+  
   },
 
   
   methods: {
+    fetchKdmValList(value){
+      
+      console.log('fetchPromiseTest==========>')
+
+      return new Promise((resolve, reject) => {
+        selectKdmLovVal({
+          lovCd: value,
+          upLovVal: this.gpProc1Info !=''? this.gpProc1Info :''
+
+        }).then(response => {
+          
+          console.log('value ===> ' + value)
+
+          console.log('response ==>' + JSON.stringify(response))
+          console.log('response.data ==>' + JSON.stringify(response.data.kdmLovVal))
+          
+
+          if(value == 'GP_PROC1') 
+            this.gpProc1 = response.data.kdmLovVal
+          else if(value == 'GP_PROC2')
+            this.gpProc2 = response.data.kdmLovVal         
+          
+          console.log('this.gpProc2 ==>' + JSON.stringify(this.gpProc2))
+
+          resolve(value = 'GP_PROC1'? this.gpProc1 : this.gpProc2)
+        
+        }).catch(error => {
+          reject(error)
+        })
+ 
+      
+      })  
+    },
     
+    async fetchKdmValListData(value) {
+      
+      this.gpProc2Info = ''
+      console.log('gpProc1Info ==>' + this.gpProc1Info)
+      
+      var list = await this.fetchKdmValList(value)
+      console.log('async fetchKdmValList ====>' + list)
+    },
+
     displayList2(value){
       
-      console.log('displayList2 ===>' + value)
+      console.log('displayList2 ===>' + JSON.stringify(value))
     },
+    
     handleNodeClick(setTree) {
-      this.newCatg.push(setTree.label)
-      this.list1.push(setTree.label)
-      //this.list2.push(setTree.label)
-      console.log(setTree.label);
+      
+      console.log('setTree.id ==> ' + setTree.id)
+      console.log('setTree.labal ==> ' + setTree.label)
+
+      selectNewCatPath({
+        catgCd: setTree.id
+
+      }).then(response => {
+        
+        console.log('response ==>' + JSON.stringify(response))
+        console.log('response.data.newCatPath ==>' + response.data.newCatPath[0].path)
+
+        let objCatTemp = {
+            id: setTree.id,
+            label:setTree.label,
+            path:response.data.newCatPath[0].path 
+        }
+
+        
+        this.newCatg.push(objCatTemp)
+        console.log('this.newCatg ==>' + JSON.stringify(this.newCatg))
+
+        this.list1.push(setTree.label)
+        //this.list2.push(setTree.label)
+        console.log(setTree.label);
+
+
+      })
+
+      
+      
     
     },
     getListData() {
