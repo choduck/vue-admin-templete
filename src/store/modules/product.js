@@ -1,5 +1,5 @@
 import { getTreeList } from '@/api/prodList'
-import { getListData,data2treeDG } from '@/utils/category'
+import { getListData,data2treeDG,setTreeData } from '@/utils/category'
 
 const getDefaultState = () => {
   return {
@@ -33,9 +33,10 @@ const actions = {
         let treeInfo = ''
         treeInfo = data2treeDG(response.data.treeModel, dataArray)
         
-        console.log('treeInfo ====>' + treeInfo)
-        commit('SET_TREELIST', treeInfo)
-        
+        console.log('treeInfo ====>' + JSON.stringify(treeInfo))
+        //commit('SET_TREELIST', treeInfo)
+        setTreeData(treeInfo)
+
         resolve()
       }).catch(error => {
         reject(error)

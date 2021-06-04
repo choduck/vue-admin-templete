@@ -4,7 +4,7 @@
       <draggable :set-data="setData" :list="list1" group="article" class="dragArea">
         <div v-for="element in list1" :key="element.id" class="list-complete-item">
           <div class="list-complete-item-handle">
-            {{ element}}
+            {{ element.path}}
           </div>
           <div style="position:absolute;right:0px;">
             <span style="float: right ;margin-top: -20px;margin-right:5px;" @click="deleteEle(element)">
@@ -66,6 +66,8 @@ export default {
           const index = this.list1.indexOf(item)
           this.list1.splice(index, 1)
           
+          //this.list2.push(item)
+          
           console.log('deleteEle=====>' + item)
           
           break
@@ -75,7 +77,8 @@ export default {
       console.log(' =====>' + this.list1)
 
       this.$emit('change1', this.list1)
-    
+      //this.$emit('change2', this.list2)
+
     },
     pushEle(ele) {
       for (const item of this.list2) {

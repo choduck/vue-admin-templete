@@ -1,7 +1,7 @@
 /**
  * Created by PanJiaChen on 16/11/18.
  */
-
+const treeList = 'vue_admin_template_treelist'
 
 export function getListData(setTree) {
   let dataArray = [];
@@ -63,4 +63,16 @@ export function data2treeDG(datas, dataArray) {
   //console.log('dataArray ===>' + dataArray)
   //this.setTree = dataArray;
   return dataArray;
+}
+
+export function setTreeData(treeValue) {
+  return sessionStorage.setItem(treeList, treeValue)
+}
+
+export function getTreeData() {
+  return sessionStorage.getItem(treeList)
+}
+
+export function removeTreeData() {
+  return sessionStorage.removeItem(treeList)
 }
