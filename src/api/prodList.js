@@ -54,3 +54,26 @@ export function selectKdmLovVal(params) {
   })
 }
 
+
+export function saveTransInfo(params) {
+
+  return axios({
+    
+    url: baseURL + '/api/saveTransInfo',
+    method: 'post',
+    data: params
+  })
+}
+
+
+export function saveNewCatInfo(params) {
+
+  return axios({
+    
+    url: baseURL + '/api/saveNewCatInfo',
+    method: 'post',
+    data: params
+  })
+}
+
+

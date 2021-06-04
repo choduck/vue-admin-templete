@@ -41,7 +41,7 @@
       </el-row>
       <el-row>
         <el-col :span="8">
-          <el-form-item label="주요소재:"><el-input v-model="form.desc" type="input" />
+          <el-form-item label="주요소재:"><el-input v-model="gpMatrNm" type="input" />
           </el-form-item>
         </el-col>
         <el-col :span="16">
@@ -77,7 +77,7 @@
       <el-row>
         <el-col :span="22">
           <el-form-item label="특이사항:">
-          <el-input v-model="form.desc" type="textarea" />
+          <el-input v-model="workUserCmmnt" type="textarea" />
           </el-form-item>
         </el-col>
         <el-col :span="2">
@@ -86,7 +86,7 @@
       <el-row>
         <el-col :span="22">
           <el-form-item label="반려사유:">
-          <el-input v-model="form.desc" type="input" />
+          <el-input v-model="inspUserCmmnt" type="input" />
           </el-form-item>
         </el-col>
         <el-col :span="2">
@@ -107,7 +107,7 @@
         </el-col>
         <el-col :span="14">
           <el-form-item>
-            <el-button type="primary" @click="onSubmit">저장하기</el-button>
+            <el-button type="primary" @click="saveNewCatInfoClick">저장하기</el-button>
             <el-button type="primary" v-on:click="testAxios">검수요청</el-button>
             <el-button type="primary" v-on:click="displaytreeData">검수요청취소</el-button>
             <el-button type="primary" v-on:click="displayList2">이관</el-button>
@@ -212,7 +212,7 @@
 
 <script>
 import axios from 'axios'
-import { getTreeList,selectNewCatPath,selectKdmLovVal } from '@/api/prodList'
+import { getTreeList,selectNewCatPath,selectKdmLovVal,saveNewCatInfo } from '@/api/prodList'
 import {getListData,data2treeDG, getTreeData } from '@/utils/category'
 import {mapState} from 'vuex'
 import DndList from '@/components/DndList'
@@ -240,6 +240,14 @@ export default {
       ],
       gpProc1Info:'',
       gpProc2Info:'',
+      
+      catg_info:[],
+      catg_del_info:[],
+      gpMatrNm:'',
+      workUserCmmnt:'',
+      inspUserCmmnt:'',
+      keyword:'',
+      
       data2: [{
         id: 1,
         label: 'Level one 1',
@@ -398,6 +406,50 @@ export default {
     displayList2(value){
       
       console.log('displayList2 ===>' + JSON.stringify(value))
+      var _this = this;
+
+
+      value.forEach(function(element, index, array){
+        console.log('displayList2 ===>' + `${JSON.stringify(element.id)}`);
+        
+        _this.catg_info.push(element.id)
+        //console.log(`${JSON.stringify(array)}의 ${index}번째 요소 : ${JSON.stringify(element.id)}`);
+      });
+    },
+
+    displayList3(value){
+      
+      //console.log('displayList3 ===>' + JSON.stringify(value))
+      
+      value.forEach(function(element, index, array){
+        console.log(`'displayList3 ===>' + ${JSON.stringify(element.id)}`);
+        this.catg_del_info.push(element.id)
+        //console.log(`${JSON.stringify(array)}의 ${index}번째 요소 : ${JSON.stringify(element.id)}`);
+      });
+    },
+
+    saveNewCatInfoClick(){
+
+      var param = { catgInfo:this.catg_info,
+                    catgDelInfo:this.catg_del_info,
+                    prodNo:this.prodNo,
+                    gpMatrNm:this.gpMatrNm,
+                    gpProc1:this.gpProc1Info,
+                    gpProc2:this.gpProc2Info,
+                    workUserCo:this.workUserCmmnt,
+                    inspUserCo:this.inspUserCmmnt,
+                    keyword : this.keyword
+                    }
+
+      console.log('param ====>' + JSON.stringify(param))
+      
+
+      saveNewCatInfo(param).then(response => {
+        
+        console.log('response ==>' + JSON.stringify(response))
+
+     })
+
     },
     
     handleNodeClick(setTree) {
@@ -430,9 +482,6 @@ export default {
 
       })
 
-      
-      
-    
     },
     getListData() {
         let dataArray = [];
