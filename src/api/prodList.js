@@ -1,8 +1,20 @@
-//import request from '@/utils/request'
+import request from '@/utils/request'
 import axios from 'axios'
 
 var baseURL = 'http://localhost:9999'
 
+export function getList(params) {
+
+  return request({
+    url: '/api/prodList',
+    //url: baseURL + '/api/prodList',
+    method: 'post',
+    data: params  
+  })
+
+}
+
+/*
 export function getList(params) {
 
   return axios({
@@ -13,6 +25,7 @@ export function getList(params) {
   })
 
 }
+*/
 
 export function getOldCatList(params) {
 
@@ -66,6 +79,7 @@ export function saveTransInfo(params) {
 }
 
 
+/*
 export function saveNewCatInfo(params) {
 
   return axios({
@@ -75,5 +89,26 @@ export function saveNewCatInfo(params) {
     data: params
   })
 }
+*/
 
 
+
+export function saveNewCatInfo(params) {
+
+  return request({
+    
+    url: '/api/saveNewCatInfo',
+    method: 'post',
+    data: params
+  })
+}
+
+export function prodMaDetail(params) {
+
+  return request({
+    
+    url: '/api/prodMaDetail',
+    method: 'post',
+    data: params
+  })
+}

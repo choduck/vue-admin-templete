@@ -212,7 +212,7 @@
 
 <script>
 import axios from 'axios'
-import { getTreeList,selectNewCatPath,selectKdmLovVal,saveNewCatInfo } from '@/api/prodList'
+import { getTreeList,selectNewCatPath,selectKdmLovVal,saveNewCatInfo,prodMaDetail } from '@/api/prodList'
 import {getListData,data2treeDG, getTreeData } from '@/utils/category'
 import {mapState} from 'vuex'
 import DndList from '@/components/DndList'
@@ -226,7 +226,8 @@ export default {
       prodNm: this.$route.query.prodNm,
       work_stat_nm: this.$route.query.work_stat_nm,
       old_catg_nm: this.$route.query.t1_old_catg_nm + '>' + this.$route.query.t2_old_catg_nm +  (this.$route.query.t3_old_catg_nm = 'undefined'? '': '>' + this.$route.query.t3_old_catg_nm) + (this.$route.query.t4_old_catg_nm = 'undefined'? '': '>' + this.$route.query.t4_old_catg_nm),
-      
+      oldCatgCd:this.$route.query.org_old_catg_cd,
+
 			walletAddressAddPop: false,							// 주소록 추가 팝업
 			destinationAddressChk: false,						// 추가주소록 체크박스
       treeData:[],
@@ -353,11 +354,33 @@ export default {
     //this.setTree = getTreeData()
     console.log('this.setTree =====>' + JSON.stringify(this.setTree))
     this.fetchKdmValListData('GP_PROC1')
+    //this.prodMaDetailFn()
     //this.testAxios()
   
   
   },
 
+  mounted() {
+      
+      console.log('this.prodNo ==>' + this.prodNo)
+      console.log('this.oldCatgCd ==>' + this.oldCatgCd)
+
+      prodMaDetail({
+        prodNo: this.prodNo,
+        oldCatgCd: this.oldCatgCd
+
+      }).then(response => {
+        
+        //console.log('response ==>' + JSON.stringify(response))
+        console.log('response.prodNewCtgy ==>' + response.data.prodNewCtgy)
+        
+        
+        this.newCatg = response.data.prodNewCtgy
+
+        console.log('this.newCatg ==>' + this.newCatg)
+
+      })
+  },
   
   methods: {
     fetchKdmValList(value){

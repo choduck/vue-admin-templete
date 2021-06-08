@@ -39,11 +39,11 @@ const actions = {
         console.log(response)
 
         //const { data } = response.data
-        console.log("data.token =======>" + response.token)
-        console.log("data.user =======>" + JSON.stringify(response.user))
+        console.log("data.token =======>" + response.data.token)
+        console.log("data.user =======>" + JSON.stringify(response.data.user))
 
-        commit('SET_TOKEN', response.token)
-        setToken(response.token)
+        commit('SET_TOKEN', response.data.token)
+        setToken(response.data.token)
 
         //commit('SET_TOKEN', data.token)
         //setToken(data.token)

@@ -114,7 +114,8 @@
                                          scope.row.t1_old_catg_nm,
                                          scope.row.t2_old_catg_nm,
                                          scope.row.t3_old_catg_nm,
-                                         scope.row.t4_old_catg_nm  
+                                         scope.row.t4_old_catg_nm,
+                                         scope.row.org_old_catg_cd  
                                         )">{{scope.row.prod_kor_nm}}</span>
 
                   </template>
