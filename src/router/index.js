@@ -51,7 +51,7 @@ export const constantRoutes = [
       path: '/',
       name: '상품 목록',
       component: () => import('@/views/prodList/index'),
-      meta: { title: '상품 목록', icon: 'table' }
+      meta: { title: '상품 목록', icon: 'list' }
     }]
   },
   {
@@ -61,7 +61,7 @@ export const constantRoutes = [
       path: '/stats',
       name: '상품 통계',
       component: () => import('@/views/statsList/index'),
-      meta: { title: '상품 통계', icon: 'table' }
+      meta: { title: '상품 통계', icon: 'excel' }
     }]
   },
   {
@@ -71,7 +71,7 @@ export const constantRoutes = [
       path: '/trans',
       name: '상품 이관',
       component: () => import('@/views/transList/transList'),
-      meta: { title: '상품 이관', icon: 'table' }
+      meta: { title: '상품 이관', icon: 'drag' }
     }]
   },
   {
@@ -92,7 +92,7 @@ export const constantRoutes = [
       path: '/mngList',
       name: '상품 상세',
       component: () => import('@/views/mngList/mngList'),
-      meta: { title: '카테고리 관리', icon: 'tree' }
+      meta: { title: '카테고리 관리', icon: 'tree-table' }
     }]
   },
 
