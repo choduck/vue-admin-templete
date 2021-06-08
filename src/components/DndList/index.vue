@@ -66,7 +66,7 @@ export default {
           const index = this.list1.indexOf(item)
           this.list1.splice(index, 1)
           
-          //this.list2.push(item)
+          this.list2.push(item)
           
           console.log('deleteEle=====>' + item)
           
@@ -77,7 +77,7 @@ export default {
       console.log(' =====>' + this.list1)
 
       this.$emit('change1', this.list1)
-      //this.$emit('change2', this.list2)
+      this.$emit('change2', this.list2)
 
     },
     pushEle(ele) {

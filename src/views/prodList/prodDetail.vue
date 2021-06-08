@@ -36,7 +36,7 @@
             <el-button type="primary" @click="walletAddressGetAddPop()">신카테고리1</el-button> 
         </el-col>
         <el-col :span="20">
-          <dnd-list :list1="newCatg"  list1-title="List"  @change1="displayList2" />
+          <dnd-list :list1="newCatg"  list1-title="List"  @change1="displayList2" @change2="displayList3"/>
         </el-col>
       </el-row>
       <el-row>
@@ -338,13 +338,13 @@ export default {
         
         getTreeList().then(response => {
         
-        console.log("this.treeList == null")
-        //console.log("response.data.treeModel =======>" + response.data.treeModel)
-        let dataArray = []
-        //commit('SET_TREELIST', response.data.treeModel)
-        dataArray = getListData(response.data.treeModel)
-        let treeInfo = ''
-        this.setTree = data2treeDG(response.data.treeModel, dataArray)
+          console.log("this.treeList == null")
+          //console.log("response.data.treeModel =======>" + response.data.treeModel)
+          let dataArray = []
+          //commit('SET_TREELIST', response.data.treeModel)
+          dataArray = getListData(response.data.treeModel)
+          let treeInfo = ''
+          this.setTree = data2treeDG(response.data.treeModel, dataArray)
         
       })
         
@@ -352,7 +352,7 @@ export default {
     }
     
     //this.setTree = getTreeData()
-    console.log('this.setTree =====>' + JSON.stringify(this.setTree))
+    //console.log('this.setTree =====>' + JSON.stringify(this.setTree))
     this.fetchKdmValListData('GP_PROC1')
     //this.prodMaDetailFn()
     //this.testAxios()
@@ -396,8 +396,8 @@ export default {
           
           console.log('value ===> ' + value)
 
-          console.log('response ==>' + JSON.stringify(response))
-          console.log('response.data ==>' + JSON.stringify(response.data.kdmLovVal))
+          //console.log('response ==>' + JSON.stringify(response))
+          //console.log('response.data ==>' + JSON.stringify(response.data.kdmLovVal))
           
 
           if(value == 'GP_PROC1') 
@@ -405,7 +405,7 @@ export default {
           else if(value == 'GP_PROC2')
             this.gpProc2 = response.data.kdmLovVal         
           
-          console.log('this.gpProc2 ==>' + JSON.stringify(this.gpProc2))
+          //console.log('this.gpProc2 ==>' + JSON.stringify(this.gpProc2))
 
           resolve(value = 'GP_PROC1'? this.gpProc1 : this.gpProc2)
         
@@ -420,18 +420,18 @@ export default {
     async fetchKdmValListData(value) {
       
       this.gpProc2Info = ''
-      console.log('gpProc1Info ==>' + this.gpProc1Info)
+      //console.log('gpProc1Info ==>' + this.gpProc1Info)
       
       var list = await this.fetchKdmValList(value)
-      console.log('async fetchKdmValList ====>' + list)
+      //console.log('async fetchKdmValList ====>' + list)
     },
 
     displayList2(value){
       
-      console.log('displayList2 ===>' + JSON.stringify(value))
+      //console.log('displayList2 ===>' + JSON.stringify(value))
       var _this = this;
 
-
+      _this.catg_info = [];
       value.forEach(function(element, index, array){
         console.log('displayList2 ===>' + `${JSON.stringify(element.id)}`);
         
@@ -443,16 +443,33 @@ export default {
     displayList3(value){
       
       //console.log('displayList3 ===>' + JSON.stringify(value))
+      var _this = this;
+      _this.catg_del_info = [];
       
       value.forEach(function(element, index, array){
         console.log(`'displayList3 ===>' + ${JSON.stringify(element.id)}`);
-        this.catg_del_info.push(element.id)
+        _this.catg_del_info.push(element.id)
         //console.log(`${JSON.stringify(array)}의 ${index}번째 요소 : ${JSON.stringify(element.id)}`);
       });
+    
+      console.log('displayList3:::this.newCatg ==>' + JSON.stringify(this.newCatg))
+      console.log('displayList3:::_this.catg_del_info ==>' + JSON.stringify(_this.catg_del_info))
+    
     },
 
     saveNewCatInfoClick(){
 
+      var _this = this
+      _this.catg_info = [];
+      this.newCatg.forEach(function(element, index, array){
+        console.log('displayList2 ===>' + `${JSON.stringify(element.id)}`);
+        
+        _this.catg_info.push(element.id)
+        //console.log(`${JSON.stringify(array)}의 ${index}번째 요소 : ${JSON.stringify(element.id)}`);
+      });
+
+      
+      
       var param = { catgInfo:this.catg_info,
                     catgDelInfo:this.catg_del_info,
                     prodNo:this.prodNo,
