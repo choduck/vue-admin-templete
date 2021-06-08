@@ -106,12 +106,16 @@
         <el-col :span="10">
         </el-col>
         <el-col :span="14">
+          <el-row>
+            <el-col :span="14" :offset="24">
           <el-form-item>
             <el-button type="primary" @click="saveNewCatInfoClick">저장하기</el-button>
             <el-button type="primary" v-on:click="testAxios">검수요청</el-button>
             <el-button type="primary" v-on:click="displaytreeData">검수요청취소</el-button>
             <el-button type="primary" v-on:click="displayList2">이관</el-button>
           </el-form-item>
+              </el-col>
+          </el-row>
         </el-col>
       </el-row>            
 <!--
