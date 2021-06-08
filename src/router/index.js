@@ -43,24 +43,12 @@ export const constantRoutes = [
     hidden: true
   },
 
+
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
     children: [{
-      path: 'dashboard',
-      name: 'Dashboard',
-      component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
-    }]
-  },
-
-  {
-    path: '/table',
-    component: Layout,
-    redirect: '/prodList/index',
-    children: [{
-      path: 'index',
+      path: '/',
       name: '상품 목록',
       component: () => import('@/views/prodList/index'),
       meta: { title: '상품 목록', icon: 'table' }
@@ -69,9 +57,8 @@ export const constantRoutes = [
   {
     path: '/stats',
     component: Layout,
-    redirect: '/statsList/index',
     children: [{
-      path: 'index',
+      path: '/stats',
       name: '상품 통계',
       component: () => import('@/views/statsList/index'),
       meta: { title: '상품 통계', icon: 'table' }
@@ -80,9 +67,8 @@ export const constantRoutes = [
   {
     path: '/trans',
     component: Layout,
-    redirect: '/transList/transList',
     children: [{
-      path: 'index',
+      path: '/trans',
       name: '상품 이관',
       component: () => import('@/views/transList/transList'),
       meta: { title: '상품 이관', icon: 'table' }
@@ -91,9 +77,8 @@ export const constantRoutes = [
   {
     path: '/detail',
     component: Layout,
-    redirect: '/prodList/prodDetail',
     children: [{
-      path: 'detail',
+      path: '/detail',
       name: '상품 상세',
       hidden: true,
       component: () => import('@/views/prodList/prodDetail'),
@@ -103,9 +88,8 @@ export const constantRoutes = [
   {
     path: '/mngList',
     component: Layout,
-    redirect: '/mngList/mngList',
     children: [{
-      path: 'index',
+      path: '/mngList',
       name: '상품 상세',
       component: () => import('@/views/mngList/mngList'),
       meta: { title: '카테고리 관리', icon: 'tree' }
