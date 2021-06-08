@@ -46,65 +46,58 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
+    redirect: '/table',
     children: [{
-      path: 'dashboard',
-      name: 'Dashboard',
-      component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+      path: 'index',
+      name: '상품 목록',
+      component: () => import('@/views/prodList/index'),
+      meta: { title: '상품 목록', icon: 'table' }
     }]
   },
-
   {
-    path: '/example',
+    path: '/stats',
     component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'el-icon-s-help' },
-    children: [
-      {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/prodList/index'),
-        meta: { title: 'Table', icon: 'table' }
-      },
-      {
-        path: 'stats',
-        name: 'Stats',
-        component: () => import('@/views/statsList/index'),
-        meta: { title: 'Stats', icon: 'table' }
-      },
-      {
-        path: 'trans',
-        name: 'Trans',
-        component: () => import('@/views/transList/transList'),
-        meta: { title: 'Trans', icon: 'table' }
-      },
-      {
-        path: 'detail',
-        name: 'prodDetail',
-        component: () => import('@/views/prodList/prodDetail'),
-        meta: { title: 'Detail', icon: 'table' }
-      },
-      {
-        path: 'mngList',
-        name: 'MngList',
-        component: () => import('@/views/mngList/mngList'),
-        meta: { title: 'MngList', icon: 'tree' }
-      },
-    ]
+    redirect: '/statsList/index',
+    children: [{
+      path: 'index',
+      name: '상품 통계',
+      component: () => import('@/views/statsList/index'),
+      meta: { title: '상품 통계', icon: 'table' }
+    }]
   },
-
-
   {
-    path: 'external-link',
+    path: '/trans',
     component: Layout,
-    children: [
-      {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'External Link', icon: 'link' }
-      }
-    ]
+    redirect: '/transList/transList',
+    children: [{
+      path: 'index',
+      name: '상품 이관',
+      component: () => import('@/views/transList/transList'),
+      meta: { title: '상품 이관', icon: 'table' }
+    }]
+  },
+  {
+    path: '/detail',
+    component: Layout,
+    redirect: '/prodList/prodDetail',
+    children: [{
+      path: 'detail',
+      name: '상품 상세',
+      hidden: true,
+      component: () => import('@/views/prodList/prodDetail'),
+      meta: { title: '상품 상세', icon: 'table' }
+    }]
+  },
+  {
+    path: '/mngList',
+    component: Layout,
+    redirect: '/mngList/mngList',
+    children: [{
+      path: 'index',
+      name: '상품 상세',
+      component: () => import('@/views/mngList/mngList'),
+      meta: { title: '카테고리 관리', icon: 'tree' }
+    }]
   },
 
   // 404 page must be placed at the end !!!

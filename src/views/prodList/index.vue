@@ -206,7 +206,7 @@ export default {
     detail(prodNo,prodNm,work_stat_nm,t1_old_catg_nm,t2_old_catg_nm,t3_old_catg_nm,t4_old_catg_nm) {
       console.log('no = ', prodNo);
       this.$router.push({
-        path: '/example/detail',
+        path: '/detail/detail',
         query: {prodNo:prodNo,
                 prodNm:prodNm,
                 work_stat_nm:work_stat_nm,
