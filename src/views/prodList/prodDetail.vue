@@ -107,7 +107,7 @@
         </el-col>
         <el-col :span="14">
           <el-row>
-            <el-col :span="14" :offset="24">
+            <el-col :offset="24">
           <el-form-item>
             <el-button type="primary" @click="saveNewCatInfoClick">저장하기</el-button>
             <el-button type="primary" v-on:click="testAxios">검수요청</el-button>
