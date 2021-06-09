@@ -110,9 +110,9 @@
             <el-col :offset="24">
           <el-form-item>
             <el-button type="primary" @click="saveNewCatInfoClick">저장하기</el-button>
-            <el-button type="primary" v-on:click="testAxios">검수요청</el-button>
-            <el-button type="primary" v-on:click="displaytreeData">검수요청취소</el-button>
-            <el-button type="primary" v-on:click="displayList2">이관</el-button>
+            <el-button type="primary" @click="actionReqClick('200')">검수요청</el-button>
+            <el-button type="primary" @click="actionReqClick('100')">검수요청취소</el-button>
+            <el-button type="primary" @click="actionTransClick">이관</el-button>
           </el-form-item>
               </el-col>
           </el-row>
@@ -216,7 +216,7 @@
 
 <script>
 import axios from 'axios'
-import { getTreeList,selectNewCatPath,selectKdmLovVal,saveNewCatInfo,prodMaDetail } from '@/api/prodList'
+import { getTreeList,selectNewCatPath,selectKdmLovVal,saveNewCatInfo,prodMaDetail,actionReq,actionTrans } from '@/api/prodList'
 import {getListData,data2treeDG, getTreeData } from '@/utils/category'
 import {mapState} from 'vuex'
 import DndList from '@/components/DndList'
@@ -489,6 +489,60 @@ export default {
       
 
       saveNewCatInfo(param).then(response => {
+        
+        console.log('response ==>' + JSON.stringify(response))
+
+     })
+
+    },
+    
+    actionReqClick(workStat_i){
+
+      var _this = this
+      _this.catg_info = [];
+      this.newCatg.forEach(function(element, index, array){
+        console.log('displayList2 ===>' + `${JSON.stringify(element.id)}`);
+        
+        _this.catg_info.push(element.id)
+        //console.log(`${JSON.stringify(array)}의 ${index}번째 요소 : ${JSON.stringify(element.id)}`);
+      });
+
+      
+      
+      var param = { catgInfo:this.catg_info,
+                    catgDelInfo:this.catg_del_info,
+                    prodNo:this.prodNo,
+                    gpMatrNm:this.gpMatrNm,
+                    gpProc1:this.gpProc1Info,
+                    gpProc2:this.gpProc2Info,
+                    workUserCo:this.workUserCmmnt,
+                    inspUserCo:this.inspUserCmmnt,
+                    keyword : this.keyword,
+                    workStat_i : workStat_i
+                    }
+
+      console.log('param ====>' + JSON.stringify(param))
+      
+
+      actionReq(param).then(response => {
+        
+        console.log('response ==>' + JSON.stringify(response))
+
+     })
+
+    },
+    
+    actionTransClick(){
+
+      var param = { 
+                    prodNo:this.prodNo,
+                    transStat:'100'
+                    }
+
+      console.log('param ====>' + JSON.stringify(param))
+      
+
+      actionTrans(param).then(response => {
         
         console.log('response ==>' + JSON.stringify(response))
 

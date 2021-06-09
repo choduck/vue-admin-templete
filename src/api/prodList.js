@@ -97,3 +97,22 @@ export function prodMaDetail(params) {
     data: params
   })
 }
+
+export function actionReq(params) {
+  return request({
+
+    url: '/api/actionReq',
+    method: 'post',
+    data: params
+  })
+}
+
+export function actionTrans(params) {
+  return request({
+
+    url: '/api/saveTransInfo',
+    method: 'post',
+    data: params
+  })
+}
+
