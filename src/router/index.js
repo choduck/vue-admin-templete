@@ -68,7 +68,7 @@ export const constantRoutes = [
     path: '/trans',
     component: Layout,
     children: [{
-      path: '/trans',
+      path: '/trans', 
       name: '상품 이관',
       component: () => import('@/views/transList/transList'),
       meta: { title: '상품 이관', icon: 'drag' }
@@ -88,11 +88,12 @@ export const constantRoutes = [
   {
     path: '/mngList',
     component: Layout,
+    redirect: '/mngList/mngList',
     children: [{
-      path: '/mngList',
+      path: 'index',
       name: '상품 상세',
       component: () => import('@/views/mngList/mngList'),
-      meta: { title: '카테고리 관리', icon: 'tree-table' }
+      meta: { title: '카테고리 관리', icon: 'tree' }
     }]
   },
 

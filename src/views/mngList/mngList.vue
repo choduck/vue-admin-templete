@@ -22,7 +22,9 @@
       <el-container>
         <el-main>
           <el-row>
-            <el-table>
+            <el-table
+            
+            >
               <el-table-column
                 prop="prod_no"
                 label="한글명"
@@ -55,46 +57,47 @@
             </el-table>
           </el-row>
           <el-row>
-            <el-table>
+            <el-table :data="tableData">
               <el-table-column
-                prop="prod_no"
+                prop="new_catg_order_seq"
                 label="순서"
                 width="180"
                 align="center"
               >
               </el-table-column>
               <el-table-column
-                prop="work_stat_nm"
+                prop="new_catg_cd"
                 label="카테고리명"
                 align="center"
               >
               </el-table-column>
               <el-table-column
-                prop="prod_no"
+                prop="new_catg_kor_nm"
                 label="한글명"
                 width="180"
                 align="center"
               >
               </el-table-column>
               <el-table-column
-                prop="work_stat_nm"
+                prop="new_catg_eng_nm"
                 label="영문명"
                 align="center"
               >
               </el-table-column>
               <el-table-column
-                prop="t1_old_catg_nm"
+                prop="work_grp"
                 label="그룹"
                 width="180"
                 align="center"
               >
               </el-table-column>
               <el-table-column
-                prop="t1_old_catg_nm"
                 label="이동"
                 width="180"
                 align="center"
               >
+              <button type="button" class="btn btn-sm btn-info" @click="moveUp(scope.$index, scope.row)">▲</button>
+              <button type="button" class="btn btn-sm btn-info" @click="moveDown(scope.$index, scope.row)">▼</button>
               </el-table-column>
             </el-table>
           </el-row>
@@ -108,10 +111,11 @@
 import axios from "axios";
 import {
   getTreeList,
-  selectNewCatPath,
   selectKdmLovVal,
   saveNewCatInfo
 } from "@/api/prodList";
+  import {getList
+} from "@/api/catgMng";
 import { getListData, data2treeDG, getTreeData } from "@/utils/category";
 import { mapState } from "vuex";
 import DndList from "@/components/DndList";
@@ -120,6 +124,7 @@ export default {
   components: { DndList },
   data() {
     return {
+      tableData: [],
       prodNo: this.$route.query.prodNo,
       prodNm: this.$route.query.prodNm,
       work_stat_nm: this.$route.query.work_stat_nm,
@@ -348,28 +353,29 @@ export default {
     },
 
     handleNodeClick(setTree) {
-      console.log("setTree.id ==> " + setTree.id);
-      console.log("setTree.labal ==> " + setTree);
-
-      selectNewCatPath({
-        catgCd: setTree.id
+      getList({
+        newCatgCd: setTree.id
       }).then(response => {
-        console.log("response ==>" + JSON.stringify(response));
+        console.log(response.data.newctgyList)
+         this.tableData = response.data.newctgyList
+         console.log(tableData)
+                    var tableSize = this.tableData.length + 1;
+                    this.listLoading = false
 
-        let objCatTemp = {
-          id: setTree.id,
-          label: setTree.label,
-          path: response.data.newCatPath[0].path
-        };
-
-        this.newCatg.push(objCatTemp);
-        console.log("this.newCatg ==>" + JSON.stringify(this.newCatg));
-
-        this.list1.push(setTree.label);
-        //this.list2.push(setTree.label)
-        console.log(setTree.label);
+                    console.log('response.data ==>' + this.tableData[tableSize])
+                    this.tableData[tableSize]
       });
     },
+    moveUp(el,ls){
+    var $tr = $ (el).parent().parent(); // 클릭한 버튼이 속한 tr 요소
+		$tr.css("background-color", "#85879659");
+		$tr.prev().before($tr); // 현재 tr 의 이전 tr 앞에 선택한 tr 넣기
+    },
+    
+    moveDown(){
+
+    },
+    
     getListData() {
       let dataArray = [];
 
