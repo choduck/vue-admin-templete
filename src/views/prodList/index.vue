@@ -1,6 +1,7 @@
 <template>
   <section>  
-    <el-form class="toolbar" :inline="true">
+<div class="app-container">
+    <el-form class="toolbar" >
       <el-form-item label="카테고리 분류">
         <el-select v-bind:style="{marginRight:'20px'}" v-model="oldCatg" @change="fetchOldCatgData()" placeholder="Select">
           <el-option
@@ -34,9 +35,7 @@
             :value="item.old_catg_cd">
           </el-option>
         </el-select>
-
       </el-form-item>
-      
       <el-form-item label="상태" prop="checkedExams">
         <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">All</el-checkbox>
         <el-checkbox-group v-model="workStat"  @change="getWorkStatList">
@@ -61,11 +60,11 @@
             placeholder="End Time" value-format="yyyy-MM-dd" @change="handleDateChange" >
           </el-date-picker>
           
-      </el-form-item><br>
+      </el-form-item>
 
       <el-form-item label="검색어">
         <el-row :gutter="5">
-          <el-col :span="6">
+          <el-col :span="3">
             <el-select v-model="SrchTypeId" placeholder="Select">
               <el-option
                 v-for="item in SrchType"
@@ -100,7 +99,7 @@
 -->
     
     </el-form>
-
+</div>
     <div class="app-container">
           <el-table :data="tableData">
               <el-table-column prop="prod_no" label="상품번호" width="180" align="center"> </el-table-column>
@@ -206,7 +205,7 @@ export default {
     detail(prodNo,prodNm,work_stat_nm,t1_old_catg_nm,t2_old_catg_nm,t3_old_catg_nm,t4_old_catg_nm) {
       console.log('no = ', prodNo);
       this.$router.push({
-        path: '/example/detail',
+        path: '/detail',
         query: {prodNo:prodNo,
                 prodNm:prodNm,
                 work_stat_nm:work_stat_nm,

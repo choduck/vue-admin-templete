@@ -43,57 +43,42 @@ export const constantRoutes = [
     hidden: true
   },
 
+
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
     children: [{
-      path: 'dashboard',
-      name: 'Dashboard',
-      component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
-    }]
-  },
-
-  {
-    path: '/table',
-    component: Layout,
-    redirect: '/prodList/index',
-    children: [{
-      path: 'index',
+      path: '/',
       name: '상품 목록',
       component: () => import('@/views/prodList/index'),
-      meta: { title: '상품 목록', icon: 'table' }
+      meta: { title: '상품 목록', icon: 'list' }
     }]
   },
   {
     path: '/stats',
     component: Layout,
-    redirect: '/statsList/index',
     children: [{
-      path: 'index',
+      path: '/stats',
       name: '상품 통계',
       component: () => import('@/views/statsList/index'),
-      meta: { title: '상품 통계', icon: 'table' }
+      meta: { title: '상품 통계', icon: 'excel' }
     }]
   },
   {
     path: '/trans',
     component: Layout,
-    redirect: '/transList/transList',
     children: [{
-      path: 'index',
+      path: '/trans', 
       name: '상품 이관',
       component: () => import('@/views/transList/transList'),
-      meta: { title: '상품 이관', icon: 'table' }
+      meta: { title: '상품 이관', icon: 'drag' }
     }]
   },
   {
     path: '/detail',
     component: Layout,
-    redirect: '/prodList/prodDetail',
     children: [{
-      path: 'detail',
+      path: '/detail',
       name: '상품 상세',
       hidden: true,
       component: () => import('@/views/prodList/prodDetail'),
