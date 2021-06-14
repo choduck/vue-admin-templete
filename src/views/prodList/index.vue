@@ -60,11 +60,11 @@
             placeholder="End Time" value-format="yyyy-MM-dd" @change="handleDateChange" >
           </el-date-picker>
           
-      </el-form-item>
+    </el-form-item>
 
       <el-form-item label="검색어">
         <el-row :gutter="5">
-          <el-col :span="3">
+     <el-col :span="3">
             <el-select v-model="SrchTypeId" placeholder="Select">
               <el-option
                 v-for="item in SrchType"
@@ -216,6 +216,10 @@ export default {
                }
       })
     },
+      handleCurrentChange(val) {
+          pg = val;
+          this.fetchData();
+        },
     handleDateChange(){
       console.log('datepicker1 ==>' + this.datepicker1)
       console.log('datepicker2 ==>' + this.datepicker2)

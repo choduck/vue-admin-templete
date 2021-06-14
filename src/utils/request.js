@@ -8,12 +8,14 @@ import { getToken } from '@/utils/auth'
 //axios.default.headers = {'Content-Type': 'application/json',
 //                         'Access-Control-Allow-Origin' : '*'}
 
-const service = axios.create({
+let token = 'Bearer ' + getToken()
+const service = 
+axios.create({
   //baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   //url: "http://localhost:9999",
   baseURL: "http://localhost:9999",
-//  headers: 'application/json;charset=utf-8',
- // headers: { 'content-type': 'application/x-www-form-urlencoded' },
+  //headers: 'application/json;charset=utf-8',
+  headers: { 'Authorization': token },
   
   
 //  withCredentials: true, // send cookies when cross-domain requests
@@ -33,7 +35,9 @@ service.interceptors.request.use(
       // let each request carry token
       // ['X-Token'] is a custom headers key
       // please modify it according to the actual situation
-      config.headers['X-Token'] = getToken()
+      //config.headers['X-Token'] = getToken()
+      config.headers['Authorization'] = 'Bearer ' + getToken()
+      //config.headers.common['Authorization'] = 'Bearer ' + getToken()
     }
     return config
   },

@@ -34,6 +34,7 @@ export function getOldCatList(params) {
   })
 }
 
+/*
 export function getTreeList() {
   return axios({
 
@@ -41,6 +42,16 @@ export function getTreeList() {
     method: 'post'
   })
 }
+*/
+
+export function getTreeList() {
+  return request({
+
+    url: '/api/treeList2',
+    method: 'post'
+  })
+}
+
 
 export function selectNewCatPath(params) {
   return axios({
