@@ -123,7 +123,7 @@ export default {
 
                     console.log('response.data ==>' + response.data)
 
-                    this.tableData = response.data
+                    this.tableData = response.data.data
                     var tableSize = this.tableData.length + 1;
                     this.listLoading = false
 

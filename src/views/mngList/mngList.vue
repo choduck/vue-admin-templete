@@ -3,13 +3,13 @@
     <el-col :span="10">
       <el-container>
         <el-main>
-          <div class="grid-content bg-purple">
+          <div class="grid-content bg-purple" style="border-right: #60626614 solid;">
             <el-tree
+              ref="tree"
               :data="setTree"
               :show-checkbox="false"
               node-key="id"
-              ref="tree"
-              highlight-current
+              highlight-current="highlight-current"
               :props="defaultProps"
               @check="currentChecked"
               @node-click="handleNodeClick"
@@ -18,126 +18,74 @@
         </el-main>
       </el-container>
     </el-col>
-    <el-col :span="14">
-      <el-container>
-        <el-main>
-          <el-row>
-            <el-table
-            
-            >
-              <el-table-column
-                prop="prod_no"
-                label="한글명"
-                width="180"
-                align="center"
-              >
-                <el-input v-model="title" class="edit-input" size="small" />
-              </el-table-column>
-              <el-table-column
-                prop="work_stat_nm"
-                label="영문명"
-                align="center"
-              >
-                <el-input v-model="title" class="edit-input" size="small" />
-              </el-table-column>
-              <el-table-column
-                prop="t1_old_catg_nm"
-                label="등록"
-                width="180"
-                align="center"
-              >
-                <template slot-scope="scope">
-                  <el-button
-                    size="mini"
-                    @click="handleEdit(scope.$index, scope.row)"
-                    >Edit</el-button
-                  >
-                </template>
-              </el-table-column>
-            </el-table>
-          </el-row>
-          <el-row>
-            <el-table :data="tableData">
-              <el-table-column
-                prop="new_catg_order_seq"
-                label="순서"
-                width="180"
-                align="center"
-              >
-              </el-table-column>
-              <el-table-column
-                prop="new_catg_cd"
-                label="카테고리명"
-                align="center"
-              >
-              </el-table-column>
-              <el-table-column
-                prop="new_catg_kor_nm"
-                label="한글명"
-                width="180"
-                align="center"
-              >
-              </el-table-column>
-              <el-table-column
-                prop="new_catg_eng_nm"
-                label="영문명"
-                align="center"
-              >
-              </el-table-column>
-              <el-table-column
-                prop="work_grp"
-                label="그룹"
-                width="180"
-                align="center"
-              >
-              </el-table-column>
-              <el-table-column
-                label="이동"
-                width="180"
-                align="center"
-              >
-              <button type="button" class="btn btn-sm btn-info" @click="moveUp(scope.$index, scope.row)">▲</button>
-              <button type="button" class="btn btn-sm btn-info" @click="moveDown(scope.$index, scope.row)">▼</button>
-              </el-table-column>
-            </el-table>
-          </el-row>
-        </el-main>
-      </el-container>
+    <el-col :span="13" style="margin-top:50px;">
+      <el-card class="box-card">
+        <div id="root">
+          <div v-if="write">
+            <el-form ref="form" :model="form" label-width="120px">
+              <el-form-item label-width="60px" label="Author:" class="postInfo-container-item">
+                <el-select v-model="form.author" :remote-method="getRemoteUserList" filterable default-first-option remote placeholder="Search user">
+                  <el-option v-for="(item,index) in userListOptions" :key="item+index" :label="item" :value="item" />
+                </el-select>
+              </el-form-item>
+              <el-form-item label="카테고리 한글명">
+                <el-input placeholder="검색어를 입력하세요" />
+              </el-form-item>
+              <el-form-item label="카테고리 영문명">
+                <el-input placeholder="검색어를 입력하세요" />
+              </el-form-item>
+              <el-form-item label="그룹">
+                <el-input placeholder="검색어를 입력하세요" />
+              </el-form-item>
+            </el-form>
+            <el-row>
+              <el-button v-if="update" type="primary" @click="onUpdateButton">수정</el-button>
+              <el-button v-else type="primary" @click="onSaveButton">등록</el-button>
+              <el-button type="primary" @click="onDetailButton">목록</el-button>
+            </el-row>
+          </div>
+          <div v-else>
+            <el-form ref="form" :model="form" label-width="120px">
+              <el-form-item label-width="60px" label="Author:" class="postInfo-container-item" />
+              <el-form-item label="ID">asdad</el-form-item>
+              <el-form-item label="레벨">asdad</el-form-item>
+              <el-form-item label="카테고리 한글명">asdad</el-form-item>
+              <el-form-item label="카테고리 영문명">asdsadasdsad</el-form-item>
+              <el-form-item label="사용여부">asdad</el-form-item>
+              <el-form-item label="생성자">asdad</el-form-item>
+              <el-form-item label="생성일자">asdad</el-form-item>
+              <el-form-item label="수정자">asdad</el-form-item>
+              <el-form-item label="수정일자">asdad</el-form-item>
+            </el-form>
+            <el-row>
+              <el-button type="primary" @click="onSaveButton">등록</el-button>
+              <el-button type="primary" @click="onUpdateButton">수정</el-button>
+              <el-button type="primary" @click="onDeleteButton">삭제</el-button>
+              <el-button type="primary" @click="onMoveButton">이동</el-button>
+            </el-row>
+          </div>
+        </div>
+      </el-card>
     </el-col>
   </el-row>
 </template>
 
 <script>
-import axios from "axios";
-import {
-  getTreeList,
-  selectKdmLovVal,
-  saveNewCatInfo
-} from "@/api/prodList";
-  import {getList
-} from "@/api/catgMng";
-import { getListData, data2treeDG, getTreeData } from "@/utils/category";
-import { mapState } from "vuex";
-import DndList from "@/components/DndList";
+import axios from 'axios'
+import { getTreeList, selectKdmLovVal, saveNewCatInfo } from '@/api/prodList'
+import { getList } from '@/api/catgMng'
+import { getListData, data2treeDG } from '@/utils/category'
+import { mapState } from 'vuex'
 
 export default {
-  components: { DndList },
   data() {
     return {
       tableData: [],
+      write: false,
+      update: false,
       prodNo: this.$route.query.prodNo,
       prodNm: this.$route.query.prodNm,
       work_stat_nm: this.$route.query.work_stat_nm,
-      old_catg_nm:
-        this.$route.query.t1_old_catg_nm +
-        ">" +
-        this.$route.query.t2_old_catg_nm +
-        (this.$route.query.t3_old_catg_nm = "undefined"
-          ? ""
-          : ">" + this.$route.query.t3_old_catg_nm) +
-        (this.$route.query.t4_old_catg_nm = "undefined"
-          ? ""
-          : ">" + this.$route.query.t4_old_catg_nm),
 
       walletAddressAddPop: false, // 주소록 추가 팝업
       destinationAddressChk: false, // 추가주소록 체크박스
@@ -148,32 +96,32 @@ export default {
       list2: [],
       gpProc1: [],
       gpProc2: [],
-      gpProc1Info: "",
-      gpProc2Info: "",
+      gpProc1Info: '',
+      gpProc2Info: '',
 
       catg_info: [],
       catg_del_info: [],
-      gpMatrNm: "",
-      workUserCmmnt: "",
-      inspUserCmmnt: "",
-      keyword: "",
+      gpMatrNm: '',
+      workUserCmmnt: '',
+      inspUserCmmnt: '',
+      keyword: '',
 
       data2: [
         {
           id: 1,
-          label: "Level one 1",
+          label: 'Level one 1',
           children: [
             {
               id: 4,
-              label: "Level two 1-1",
+              label: 'Level two 1-1',
               children: [
                 {
                   id: 9,
-                  label: "Level three 1-1-1"
+                  label: 'Level three 1-1-1'
                 },
                 {
                   id: 10,
-                  label: "Level three 1-1-2"
+                  label: 'Level three 1-1-2'
                 }
               ]
             }
@@ -181,53 +129,51 @@ export default {
         },
         {
           id: 2,
-          label: "Level one 2",
+          label: 'Level one 2',
           children: [
             {
               id: 5,
-              label: "Level two 2-1"
+              label: 'Level two 2-1'
             },
             {
               id: 6,
-              label: "Level two 2-2"
+              label: 'Level two 2-2'
             }
           ]
         },
         {
           id: 3,
-          label: "Level one 3",
+          label: 'Level one 3',
           children: [
             {
               id: 7,
-              label: "Level two 3-1"
+              label: 'Level two 3-1'
             },
             {
               id: 8,
-              label: "Level two 3-2"
+              label: 'Level two 3-2'
             }
           ]
         }
       ],
       defaultProps: {
-        children: "children",
-        label: "label"
+        children: 'children',
+        label: 'label'
       },
 
-      //treeList:'',
-
+      // treeList:'',
       form: {
-        name: "",
-        region: "",
-        date1: "",
-        date2: "",
+        name: '',
+        region: '',
+        date1: '',
+        date2: '',
         delivery: false,
         type: [],
-        resource: "",
-        desc: ""
+        resource: '',
+        desc: ''
       }
-    };
+    }
   },
-
   computed: {
     ...mapState({
       treeList: state => state.product.treeList
@@ -236,100 +182,77 @@ export default {
 
   watch: {
     list2(value) {
-      console.log("value ===>" + value);
+      console.log('value ===>' + value)
     },
     walletAddressAddPop(value) {
-      console.log("value ===>" + value);
+      console.log('value ===>' + value)
 
-      if (value == true) {
+      if (value === true) {
         // 1주일
 
-        var _this = this;
-        if (this.treeList != "") _this.setTree = this.treeList;
-        //_this.setTree = getTreeData()
+        var _this = this
+        if (this.treeList !== '') _this.setTree = this.treeList
+        // _this.setTree ()
       }
     }
   },
 
   created() {
-    console.log("create this.treeList ==>" + this.treeList);
-    if (this.treeList == "") {
+    console.log('create this.treeList ==>' + this.treeList)
+    if (this.treeList === '') {
       getTreeList().then(response => {
-        console.log("this.treeList == null");
-        //console.log("response.data.treeModel =======>" + response.data.treeModel)
-        let dataArray = [];
-        //commit('SET_TREELIST', response.data.treeModel)
-        dataArray = getListData(response.data.treeModel);
-        let treeInfo = "";
-        this.setTree = data2treeDG(response.data.treeModel, dataArray);
-      });
+        console.log('this.treeList == null')
+        // console.log("response.data.treeModel =======>" + response.data.treeModel)
+        let dataArray = []
+        // commit('SET_TREELIST', response.data.treeModel)
+        dataArray = getListData(response.data.treeModel)
+        this.setTree = data2treeDG(response.data.treeModel, dataArray)
+      })
     }
 
-    //this.setTree = getTreeData()
-    console.log("this.setTree =====>" + JSON.stringify(this.setTree));
-    this.fetchKdmValListData("GP_PROC1");
-    //this.testAxios()
+    // this.setTree ()
+    console.log('this.setTree =====>' + JSON.stringify(this.setTree))
+    this.fetchKdmValListData('GP_PROC1')
+    // this.testAxios()
   },
 
   methods: {
     fetchKdmValList(value) {
-      console.log("fetchPromiseTest==========>");
+      console.log('fetchPromiseTest==========>')
 
       return new Promise((resolve, reject) => {
         selectKdmLovVal({
           lovCd: value,
-          upLovVal: this.gpProc1Info != "" ? this.gpProc1Info : ""
+          upLovVal: this.gpProc1Info !== '' ? this.gpProc1Info : ''
         })
           .then(response => {
-            console.log("value ===> " + value);
+            console.log('value ===> ' + value)
 
-            console.log("response ==>" + JSON.stringify(response));
+            console.log('response ==>' + JSON.stringify(response))
             console.log(
-              "response.data ==>" + JSON.stringify(response.data.kdmLovVal)
-            );
+              'response.data ==>' + JSON.stringify(response.data.kdmLovVal)
+            )
 
-            if (value == "GP_PROC1") this.gpProc1 = response.data.kdmLovVal;
-            else if (value == "GP_PROC2")
-              this.gpProc2 = response.data.kdmLovVal;
+            if (value === 'GP_PROC1') this.gpProc1 = response.data.kdmLovVal
+            else if (value === 'GP_PROC2') { this.gpProc2 = response.data.kdmLovVal }
 
-            console.log("this.gpProc2 ==>" + JSON.stringify(this.gpProc2));
+            console.log('this.gpProc2 ==>' + JSON.stringify(this.gpProc2))
 
-            resolve((value = "GP_PROC1" ? this.gpProc1 : this.gpProc2));
+            resolve((value === 'GP_PROC1' ? this.gpProc1 : this.gpProc2))
           })
           .catch(error => {
-            reject(error);
-          });
-      });
+            reject(error)
+          })
+      })
     },
-
+    getRemoteUserList(query) {
+    },
     async fetchKdmValListData(value) {
-      this.gpProc2Info = "";
-      console.log("gpProc1Info ==>" + this.gpProc1Info);
+      this.gpProc2Info = ''
+      console.log('gpProc1Info ==>' + this.gpProc1Info)
 
-      var list = await this.fetchKdmValList(value);
-      console.log("async fetchKdmValList ====>" + list);
-    },
-
-    displayList2(value) {
-      console.log("displayList2 ===>" + JSON.stringify(value));
-      var _this = this;
-
-      value.forEach(function(element, index, array) {
-        console.log("displayList2 ===>" + `${JSON.stringify(element.id)}`);
-
-        _this.catg_info.push(element.id);
-        //console.log(`${JSON.stringify(array)}의 ${index}번째 요소 : ${JSON.stringify(element.id)}`);
-      });
-    },
-
-    displayList3(value) {
-      //console.log('displayList3 ===>' + JSON.stringify(value))
-
-      value.forEach(function(element, index, array) {
-        console.log(`'displayList3 ===>' + ${JSON.stringify(element.id)}`);
-        this.catg_del_info.push(element.id);
-        //console.log(`${JSON.stringify(array)}의 ${index}번째 요소 : ${JSON.stringify(element.id)}`);
-      });
+      var list = await this.fetchKdmValList(value)
+      console.log('async fetchKdmValList ====>' + list)
     },
 
     saveNewCatInfoClick() {
@@ -343,13 +266,13 @@ export default {
         workUserCo: this.workUserCmmnt,
         inspUserCo: this.inspUserCmmnt,
         keyword: this.keyword
-      };
+      }
 
-      console.log("param ====>" + JSON.stringify(param));
+      console.log('param ====>' + JSON.stringify(param))
 
       saveNewCatInfo(param).then(response => {
-        console.log("response ==>" + JSON.stringify(response));
-      });
+        console.log('response ==>' + JSON.stringify(response))
+      })
     },
 
     handleNodeClick(setTree) {
@@ -357,144 +280,153 @@ export default {
         newCatgCd: setTree.id
       }).then(response => {
         console.log(response.data.newctgyList)
-         this.tableData = response.data.newctgyList
-         console.log(tableData)
-                    var tableSize = this.tableData.length + 1;
-                    this.listLoading = false
+        this.tableData = response.data.newctgyList
+        var tableSize = this.tableData.length + 1
+        this.listLoading = false
 
-                    console.log('response.data ==>' + this.tableData[tableSize])
-                    this.tableData[tableSize]
-      });
+        console.log('response.data ==>' + this.tableData[tableSize])
+        this.tableData[tableSize]
+      })
     },
-    moveUp(el,ls){
-    var $tr = $ (el).parent().parent(); // 클릭한 버튼이 속한 tr 요소
-		$tr.css("background-color", "#85879659");
-		$tr.prev().before($tr); // 현재 tr 의 이전 tr 앞에 선택한 tr 넣기
-    },
-    
-    moveDown(){
 
-    },
-    
     getListData() {
-      let dataArray = [];
+      const dataArray = []
 
-      console.log("forEach start ==>");
+      console.log('forEach start ==>')
       this.setTree.forEach(function(data) {
-        let parentId = data.parentId;
+        const parentId = data.parentId
 
-        console.log("parentId ==>" + parentId);
+        console.log('parentId ==>' + parentId)
 
-        if (parentId == "0000000000") {
-          let objTemp = {
+        if (parentId === '0000000000') {
+          const objTemp = {
             id: data.id,
             label: data.name,
-            /*order: data.order,*/
+            /* order: data.order,*/
             parentId: parentId
-          };
-          dataArray.push(objTemp);
+          }
+          dataArray.push(objTemp)
         }
-      });
+      })
 
-      //console.log('this.setTree ==>' + this.setTree)
-      console.log("dataArray ==>" + dataArray);
+      // console.log('this.setTree ==>' + this.setTree)
+      console.log('dataArray ==>' + dataArray)
 
-      this.data2treeDG(this.setTree, dataArray);
+      this.data2treeDG(this.setTree, dataArray)
     },
 
     data2treeDG(datas, dataArray) {
       for (let j = 0; j < dataArray.length; j++) {
-        let dataArrayIndex = dataArray[j];
-        let childrenArray = [];
-        let Id = dataArrayIndex.id;
+        const dataArrayIndex = dataArray[j]
+        const childrenArray = []
+        const Id = dataArrayIndex.id
         for (let i = 0; i < datas.length; i++) {
-          let data = datas[i];
+          const data = datas[i]
 
-          let parentId = data.parentId;
-          if (parentId == Id) {
-            //Determine whether it is a child node
-            let objTemp = {
+          const parentId = data.parentId
+          if (parentId === Id) {
+            // Determine whether it is a child node
+            const objTemp = {
               id: data.id,
               label: data.name,
               /* order: data.order,*/
               parentId: parentId
-            };
-            childrenArray.push(objTemp);
+            }
+            childrenArray.push(objTemp)
           }
         }
-        dataArrayIndex.children = childrenArray;
-        console.log(666);
-        console.log(dataArrayIndex.children);
+        dataArrayIndex.children = childrenArray
+        console.log(666)
+        console.log(dataArrayIndex.children)
         if (childrenArray.length > 0) {
-          //Recursive if there are son nodes
-          this.data2treeDG(datas, childrenArray);
+          // Recursive if there are son nodes
+          this.data2treeDG(datas, childrenArray)
         }
       }
-      this.setTree = dataArray;
-      return dataArray;
+      this.setTree = dataArray
+      return dataArray
     },
 
     currentChecked(data, currentChecked) {
-      const { checkedNodes, halfCheckedNodes } = currentChecked;
-      console.log(checkedNodes, halfCheckedNodes);
+      const { checkedNodes, halfCheckedNodes } = currentChecked
+      console.log(checkedNodes, halfCheckedNodes)
     },
 
     isEmpty(value) {
-      if (value == "" || value == null || value == undefined) {
-        return "";
+      if (value === '' || value == null || value === undefined) {
+        return ''
       } else {
-        return value;
+        return value
       }
     },
     walletAddressGetAddPop() {
-      this.walletAddressAddPop = true;
+      this.walletAddressAddPop = true
     },
     testAxios() {
-      this.workStat = ["100", "200", "300"];
-      var _this = this;
+      this.workStat = ['100', '200', '300']
+      var _this = this
 
       var jsonData = {
-        upCatgCd: "",
-        catgLv: ""
-        //workStat: '100'
-        //workStat: ''
-        //checkedExams1: ['100']
-      };
+        upCatgCd: '',
+        catgLv: ''
+        // workStat: '100'
+        // workStat: ''
+        // checkedExams1: ['100']
+      }
 
-      console.log("==========>" + JSON.stringify(jsonData));
+      console.log('==========>' + JSON.stringify(jsonData))
 
-      console.log("this.data2 ===>", this.data2);
+      console.log('this.data2 ===>', this.data2)
 
       axios
         .post(
-          "http://localhost:9999/api/treeList",
+          'http://localhost:9999/api/treeList',
           jsonData
-          //axios.post('http://localhost:9999/api/prodList3', JSON.stringify(jsonData)
+          // axios.post('http://localhost:9999/api/prodList3', JSON.stringify(jsonData)
           //   ,{ headers: { 'Content-Type': 'application/json' } }
         )
         .then(function(response) {
-          if (response.status == 200) {
-            console.log(response.data.newCatList);
-            _this.treeData = response.data.newCatList;
+          if (response.status === 200) {
+            console.log(response.data.newCatList)
+            _this.treeData = response.data.newCatList
           }
-        });
+        })
     },
 
     displaytreeData() {
-      console.log("treeList ===>" + this.treeList);
+      console.log('treeList ===>' + this.treeList)
     },
 
     onSubmit() {
-      this.$message("submit!");
+      this.$message('submit!')
     },
     onCancel() {
       this.$message({
-        message: "cancel!",
-        type: "warning"
-      });
+        message: 'cancel!',
+        type: 'warning'
+      })
+    },
+    // 등록 화면 버튼
+    onSaveButton() {
+      this.write = true
+      this.update = false
+    },
+    // 수정 화면 버튼
+    onUpdateButton() {
+      // eslint-disable-next-line no-sequences
+      this.write = true,
+      this.update = true
+    },
+    // 목록 화면 버튼
+    onDetailButton() {
+      this.write = false
+    },
+    // 삭제 버튼
+    onDeleteButton() {
+
     }
   }
-};
+}
 </script>
 
 <style scoped>

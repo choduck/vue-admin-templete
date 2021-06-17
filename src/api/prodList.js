@@ -54,27 +54,28 @@ export function getTreeList() {
 
 
 export function selectNewCatPath(params) {
-  return axios({
+  return request({
 
-    url: baseURL + '/api/selectNewCatPath',
+    url: '/api/selectNewCatPath',
     method: 'post',
     data: params
   })
 }
 
 export function selectKdmLovVal(params) {
-  return axios({
+  return request({
 
-    url: baseURL + '/api/selectKdmLovVal',
+    url:'/api/selectKdmLovVal',
     method: 'post',
     data: params
   })
 }
 
-export function saveTransInfo(params) {
-  return axios({
 
-    url: baseURL + '/api/saveTransInfo',
+export function saveTransInfo(params) {
+  return request({
+
+    url:'/api/saveTransInfo',
     method: 'post',
     data: params
   })
